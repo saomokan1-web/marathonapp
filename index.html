@@ -3,19 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Marathon Readiness — 2:45 Tracker</title>
+  <title>Marathon Coach — 2:45 Tracker</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <h1>Marathon Readiness</h1>
+      <h1>Marathon Coach</h1>
       <p class="subtitle">Target: <strong>2:45:00</strong> marathon &middot; <strong>3:54 / km</strong></p>
     </div>
+    <nav class="tabs" id="tabs" hidden>
+      <button class="tab active" id="tabDash" type="button">Dashboard</button>
+      <button class="tab" id="tabCoach" type="button">Coach</button>
+    </nav>
     <div class="upload">
       <label class="file-btn">
         <input type="file" id="csvInput" accept=".csv" />
-        <span>Upload CSV (Strava or Garmin)</span>
+        <span id="uploadLabel">Upload CSV (Strava or Garmin)</span>
       </label>
       <button id="clearBtn" class="ghost" type="button" hidden>Clear</button>
     </div>
@@ -29,13 +34,16 @@
         (<em>Settings &rarr; My Account &rarr; Download or Delete Your Account</em>)
         or <strong>Garmin Connect</strong>
         (<em>Activities &rarr; All Activities &rarr; Export CSV</em>)
-        and drop the file above. Everything is parsed locally in your browser &mdash;
+        and drop the file above. Everything is parsed and stored locally in your browser &mdash;
         nothing is uploaded anywhere.
       </p>
       <p class="hint">
         Only runs will be included. Distances and paces are shown in kilometres.
+        Your data is remembered on this device, so you only upload again when you have new runs.
       </p>
     </section>
+
+    <div id="dataNote" class="data-note" hidden></div>
 
     <section id="dashboard" hidden>
       <div class="cards">
@@ -105,6 +113,39 @@
             <tbody></tbody>
           </table>
         </div>
+      </div>
+    </section>
+
+    <section id="coach" hidden>
+      <div class="chart-block">
+        <h3>Coach's read</h3>
+        <p class="chart-note" id="coachAsOf"></p>
+        <div class="insights" id="insights"></div>
+      </div>
+
+      <div class="chart-block">
+        <h3>Ask your coach</h3>
+        <p class="chart-note">
+          Pick a question or write your own. The app attaches your current training numbers
+          and opens the conversation in Claude.
+        </p>
+        <div class="quick" id="quick">
+          <button class="chip" type="button" data-q="Plan my next 7 days of training. Give me each day's session with distance and target pace.">Plan my next 7 days</button>
+          <button class="chip" type="button" data-q="Review my last week of training. What went well, what should change, and what is the one thing to fix first?">Review my last week</button>
+          <button class="chip" type="button" data-q="Am I on track for a 2:45 marathon? Be honest about the gap and what closing it takes.">Am I on track for 2:45?</button>
+          <button class="chip" type="button" data-q="Build me a long-run progression for the next 8 weeks, including marathon-pace segments.">Build my long-run progression</button>
+        </div>
+        <label class="ask-label" for="askBox">Your question</label>
+        <textarea id="askBox" rows="3" placeholder="e.g. My legs felt heavy on Tuesday's tempo. Should I move Thursday's session?"></textarea>
+        <div class="ask-actions">
+          <button class="primary-btn" id="askBtn" type="button">Ask in Claude</button>
+          <button class="ghost" id="copyBtn" type="button">Copy question with my numbers</button>
+          <span class="ask-status" id="askStatus" role="status"></span>
+        </div>
+        <details class="snapshot">
+          <summary>See the numbers that get attached</summary>
+          <pre id="snapshotText"></pre>
+        </details>
       </div>
     </section>
 
