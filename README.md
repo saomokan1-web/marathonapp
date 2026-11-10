@@ -1,4 +1,4 @@
-# Marathon Coach
+# Marathon Readiness
 
 A personal, browser-only training tracker that estimates when you'll be ready
 to run a **2:45 marathon** (3:54 / km).
@@ -42,14 +42,3 @@ ones), computes a weekly distance-weighted average pace, and fits a linear
 regression over the most recent ~26 weeks. It then projects when that trend
 line crosses 3:54 / km and reports the date. If your trend is flat or
 worsening, it will say so instead of inventing a number.
-
-## Coach view
-
-The **Coach** tab reads your recent training (load, consistency, long run,
-pace, goal-pace work) and gives a plain next step for each. **Ask in Claude**
-opens a conversation with your current numbers attached.
-
-## Saved data
-
-Your runs are saved in the browser on your device, so the app opens with your
-data. Upload a new CSV only when you have new runs.
